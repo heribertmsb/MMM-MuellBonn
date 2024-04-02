@@ -65,9 +65,9 @@ Module.register("MMM-MuellBonn", {
   getTrashIcon: function(trashType) {
       // Define mapping between trash types and corresponding icons
       const iconMap = {
-          'GR': 'grey_icon.png',
-          'BL': 'blue_icon.png',
-          'YE': 'yellow_icon.png'
+          'GR': 'grey_trash_icon.png',
+          'BL': 'blue_trash_icon.png',
+          'YE': 'yellow_trash_icon.png'
       };
       // Return HTML for displaying the icon
       return `<img src="${this.config.iconPath}${iconMap[trashType]}" />`;
