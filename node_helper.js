@@ -13,24 +13,28 @@ module.exports = NodeHelper.create({
         }
     },
 
-    // Load the trash schedule from CSV file
-    loadTrashSchedule: function(csvFilePath) {
-        const self = this;
-        fs.readFile(csvFilePath, 'utf8', function(err, data) {
-            if (err) {
-                console.error('Error loading CSV file:', err);
-                self.sendSocketNotification('TRASH_SCHEDULE_ERROR', { error: err });
-                return;
-            }
+   // Load the trash schedule from CSV file
+loadTrashSchedule: function(csvFilePath) {
+    const self = this;
+    const fs = require('fs');
+    const moment = require('moment');
 
-            const rows = data.trim().split('\n').map(row => row.split(';'));
-            const trashSchedule = rows.map(row => ({
-                date: row[0].trim(),
-                type: row[1].trim()
-            }));
+    fs.readFile(csvFilePath, 'utf8', function(err, data) {
+        if (err) {
+            self.sendSocketNotification('TRASH_SCHEDULE_ERROR', { error: err });
+            return;
+        }
 
-            // Send the loaded trash schedule to the client-side JavaScript
-            self.sendSocketNotification('TRASH_SCHEDULE_LOADED', { trashSchedule });
+        // Split data into rows and parse each row
+        const rows = data.trim().split('\n');
+        const trashSchedule = rows.map(row => {
+            const [date, type] = row.trim().split(';'); // Use semicolon as delimiter
+            return { date, type };
         });
-    }
+
+        // Send the loaded trash schedule to the client-side JavaScript
+        self.sendSocketNotification('TRASH_SCHEDULE_LOADED', { trashSchedule });
+    });
+}
+
 });
