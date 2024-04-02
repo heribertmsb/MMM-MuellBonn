@@ -18,7 +18,7 @@ loadTrashSchedule: function(csvFilePath) {
     const self = this;
     const fs = require('fs');
     const moment = require('moment');
-
+    console.log('CSV import start');
     fs.readFile(csvFilePath, 'utf8', function(err, data) {
         if (err) {
             self.sendSocketNotification('TRASH_SCHEDULE_ERROR', { error: err });
