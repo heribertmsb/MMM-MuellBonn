@@ -38,7 +38,7 @@ Module.register("MMM-MuellBonn", {
           }
           console.log("MMM-MuellBonn module csv gelesen!");      
           
-          const rows = data.trim().split('\n').map(row => row.split(','));
+          const rows = data.trim().split('\n').map(row => row.split(';'));
           const trashSchedule = rows.map(row => ({
               date: moment(row[0], 'DD.MM.YYYY'),
               type: row[1]
