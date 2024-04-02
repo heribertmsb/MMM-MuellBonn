@@ -4,7 +4,7 @@
  * By Steven Heribert , heribert@makerspacebonn.de
  * MIT Licensed.
  */
-Module.register("MMM-MuellBonn", {
+Module.register("trash_schedule", {
   // Define module defaults
   defaults: {
       daysFromToday: 4,
@@ -78,4 +78,3 @@ Module.register("MMM-MuellBonn", {
       return trashSchedule.filter(trash => trash.date.isSame(targetDate, 'day'));
   }
 });
-
