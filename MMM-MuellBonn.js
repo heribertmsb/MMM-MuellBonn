@@ -37,13 +37,45 @@ Module.register("MMM-MuellBonn", {
 
   // Process loaded trash schedule
   processTrashSchedule: function(trashSchedule) {
-      // Your logic to process the loaded trash schedule and update the module content
-      console.log("Trash schedule loaded:", trashSchedule);
+      // Filter trash collections based on the number of days from today
+      const today = moment();
+      const upcomingCollections = trashSchedule.filter(entry => {
+          const collectionDate = moment(entry.date, 'DD.MM.YYYY');
+          const daysUntilCollection = collectionDate.diff(today, 'days');
+          return daysUntilCollection <= this.config.daysFromToday;
+      });
+
+      // Generate HTML for displaying upcoming collections
+      const container = document.createElement('div');
+      upcomingCollections.forEach(entry => {
+          const collectionDate = moment(entry.date, 'DD.MM.YYYY');
+          const daysUntilCollection = collectionDate.diff(today, 'days');
+          const icon = this.getTrashIcon(entry.type);
+          const collectionText = `${collectionDate.format('DD.MM.YYYY')} (${daysUntilCollection} days)`;
+          const entryElement = document.createElement('div');
+          entryElement.innerHTML = `${icon} ${collectionText}`;
+          container.appendChild(entryElement);
+      });
+
+      // Update module's DOM with the generated HTML
+      this.updateDom(1000, container);
+  },
+
+  // Get trash icon HTML
+  getTrashIcon: function(trashType) {
+      // Define mapping between trash types and corresponding icons
+      const iconMap = {
+          'GR': 'grey_icon.png',
+          'BL': 'blue_icon.png',
+          'YE': 'yellow_icon.png'
+      };
+      // Return HTML for displaying the icon
+      return `<img src="${this.config.iconPath}${iconMap[trashType]}" />`;
   },
 
   // Override dom generator
   getDom: function() {
-      // Generate and return module content
-      return document.createElement("div");
+      // Create and return an empty container element
+      return document.createElement('div');
   }
 });
