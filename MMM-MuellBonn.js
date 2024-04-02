@@ -5,112 +5,77 @@
  * MIT Licensed.
  */
 Module.register("MMM-MuellBonn", {
-  // Module config defaults.
+  // Define module defaults
   defaults: {
-    //update every 3 minutes
-    updateInterval: 180000,
-    //fade speed
-    fadeSpeed: 4000,
-    //initial load delay
-    initialLoadDelay: 0,
-    //retry delay
-    retryDelay: 2500,
-    
+      daysFromToday: 4,
+      csvFilePath: 'trash_collection_schedule.csv', // Path to your CSV file
+      iconPath: 'icons/',
+      updateInterval: 60 * 60 * 1000, // Update interval in milliseconds (1 hour in this example)
   },
 
-  
-  getStyles: function () {
-    return [
-      "style.css" // will try to load it from the vendor folder, otherwise it will load is from the module folder.
-    ];
+  // Start the module
+  start: function() {
+      // Load the trash schedule
+      this.loadTrashSchedule();
+
+      // Schedule updates
+      setInterval(() => {
+          this.loadTrashSchedule();
+      }, this.config.updateInterval);
   },
 
-  // Define start sequence.
-  start: function () {
-    Log.info("Starting module: " + this.name);
+  // Load the trash schedule
+  loadTrashSchedule: function() {
+      const self = this;
+      const csvData = fs.readFileSync(this.config.csvFilePath, 'utf8');
+      const rows = csvData.trim().split('\n').map(row => row.split(','));
+      const trashSchedule = rows.map(row => ({
+          date: moment(row[0], 'DD.MM.YYYY'),
+          type: row[1]
+      }));
 
-    // Schedule update timer.
-    setInterval(() => {
-      this.updateDom(this.config.fadeSpeed);
-    }, this.config.updateInterval);
+      // Find trash collections for the specific date and days from today
+      const today = moment();
+      const specificDate = today.format('YYYY-MM-DD');
+      const collections = this.findTrashCollections(specificDate, this.config.daysFromToday, trashSchedule);
+
+      // Generate icons for each trash collection
+      let widgetContent = '';
+      if (collections.length > 0) {
+          const icons = collections.map(trash => {
+              let iconColor = '';
+              switch (trash.type) {
+                  case 'GR':
+                      iconColor = 'grey';
+                      break;
+                  case 'BL':
+                      iconColor = 'blue';
+                      break;
+                  case 'YE':
+                      iconColor = 'yellow';
+                      break;
+                  default:
+                      iconColor = 'black';
+                      break;
+              }
+              return `<img src="${self.config.iconPath}${iconColor}_trash_icon.png" alt="${trash.type} Trash Icon" />`;
+          });
+
+          // Format the date and display garbage can icons
+          const formattedDate = moment(specificDate).add(this.config.daysFromToday, 'days').format('DD.MM.YYYY');
+          widgetContent = `<div>Trash collections for ${formattedDate} (${this.config.daysFromToday} days from today):</div>${icons.join('')}`;
+      } else {
+          widgetContent = '<div>No upcoming trash collections found within the specified period.</div>';
+      }
+
+      // Update the module content
+      self.updateDom(1000, widgetContent);
   },
 
-// Import necessary modules
-const fs = require('fs');
-const moment = require('moment');
-
-// Load the CSV file
-const csvFilePath = 'trash_collection_schedule.csv'; // Path to your CSV file
-const csvData = fs.readFileSync(csvFilePath, 'utf8');
-
-// Parse CSV data
-const rows = csvData.trim().split('\n').map(row => row.split(','));
-
-// Extract dates and garbage can types
-const trashSchedule = rows.map(row => ({
-    date: moment(row[0], 'DD.MM.YYYY'),
-    type: row[1]
-}));
-
-// Find the next collection date
-const today = moment();
-const nextCollection = trashSchedule.find(trash => trash.date.isAfter(today));
-
-// Define widget content
-let widgetContent = '';
-if (nextCollection) {
-    // Calculate days until next collection
-    const daysUntilNextCollection = nextCollection.date.diff(today, 'days');
-
-    // Determine color based on days until next collection
-    let textColor = 'black';
-    if (daysUntilNextCollection === 1) {
-        textColor = 'red'; // One day before collection
-    }
-
-    // Group trash collections by date
-    const collectionsForNextDate = trashSchedule.filter(trash => trash.date.isSame(nextCollection.date));
-
-    // Sort collections by type, considering the order GR, BL, YE
-    collectionsForNextDate.sort((a, b) => {
-        const order = { GR: 1, BL: 2, YE: 3 };
-        return order[a.type] - order[b.type];
-    });
-
-    // Generate icons for each type of garbage collected
-    const icons = collectionsForNextDate.map(trash => {
-        let iconColor = '';
-        switch (trash.type) {
-            case 'GR':
-                iconColor = 'grey';
-                break;
-            case 'BL':
-                iconColor = 'blue';
-                break;
-            case 'YE':
-                iconColor = 'yellow';
-                break;
-            default:
-                iconColor = 'black';
-                break;
-        }
-        return `<img src="icons/${iconColor}_trash_icon.png" alt="${trash.type} Trash Icon" />`;
-    });
-
-    // Format the date and display garbage can icons
-    const formattedDate = nextCollection.date.format('DD.MM.YYYY');
-    widgetContent = `<div style="color: ${textColor};">Next collection: ${formattedDate}</div>`;
-    widgetContent += icons.join('');
-} else {
-    widgetContent = '<div>No upcoming trash collection dates found</div>';
-}
-
-// Output widget content
-console.log(widgetContent);
-
-
-
-
-
-
+  // Find trash collections a certain number of days from a specific date
+  findTrashCollections: function(date, daysFromToday, trashSchedule) {
+      const targetDate = moment(date).add(daysFromToday, 'days');
+      return trashSchedule.filter(trash => trash.date.isSame(targetDate, 'day'));
+  }
 });
+
