@@ -1,8 +1,7 @@
-# MMM-urbandictionary
+# MMM-MuellBonn
 
-A [MagicMirror](https://github.com/MichMich/MagicMirror) Module to show random words from urbandictionary.com. This shows the word, definition, example, and author and updates every 3 minutes.
+A [MagicMirror](https://github.com/MichMich/MagicMirror) Module to remind on the next date for trash collection.
 
-![MMM-urbandictionary module screenshot](/screenshot/mirror.png)
 
 ## Requirements
 
@@ -10,17 +9,17 @@ This module is to be used with the [MagicMirror](https://github.com/MichMich/Mag
 
 ## Installation
 
-1. Navigate into your MagicMirror's `modules` folder and execute `git clone https://github.com/leabs/MMM-urbandictionary.git`
+1. Navigate into your MagicMirror's `modules` folder and execute `git clone https://github.com/heribertmsb/MMM-MuellBonn`
 2. Open your config file in `config/config.js` and add the module to the modules array like so:
 
 ```
 modules: [
     ...Other Modules Here...,
     {
-        module: 'MMM-urbandictionary',
+        module: 'MMM-MuellBonn',
         position: 'top_right',
     }
 ]
 ```
 
-_Note_: The custom CSS for this module (`style.css`) is located in the `MMM-urbandictionary` folder and is set for a width of `420px`. This value may have to be adjusted for your mirror and preferred location for the module.
+_Note_: The custom CSS for this module (`style.css`) is located in the `MMM-MUellBonn` folder and is set for a width of `420px`. This value may have to be adjusted for your mirror and preferred location for the module.
