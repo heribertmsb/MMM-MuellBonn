@@ -15,7 +15,9 @@ Module.register("MMM-MuellBonn", {
 
   // Start the module
   start: function() {
-      this.loadTrashSchedule(); // Load trash schedule initially
+    console.log("MMM-MuellBonn module started!");  
+    
+    this.loadTrashSchedule(); // Load trash schedule initially
 
       // Schedule updates
       setInterval(() => {
@@ -34,7 +36,8 @@ Module.register("MMM-MuellBonn", {
               self.updateDom(1000, '<div>Error loading CSV file</div>');
               return;
           }
-
+          console.log("MMM-MuellBonn module csv gelesen!");      
+          
           const rows = data.trim().split('\n').map(row => row.split(','));
           const trashSchedule = rows.map(row => ({
               date: moment(row[0], 'DD.MM.YYYY'),
