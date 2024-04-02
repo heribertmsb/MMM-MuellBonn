@@ -71,6 +71,12 @@ if (nextCollection) {
     // Group trash collections by date
     const collectionsForNextDate = trashSchedule.filter(trash => trash.date.isSame(nextCollection.date));
 
+    // Sort collections by type, considering the order GR, BL, YE
+    collectionsForNextDate.sort((a, b) => {
+        const order = { GR: 1, BL: 2, YE: 3 };
+        return order[a.type] - order[b.type];
+    });
+
     // Generate icons for each type of garbage collected
     const icons = collectionsForNextDate.map(trash => {
         let iconColor = '';
@@ -96,12 +102,11 @@ if (nextCollection) {
     widgetContent = `<div style="color: ${textColor};">Next collection: ${formattedDate}</div>`;
     widgetContent += icons.join('');
 } else {
-    widgetContent = '<div>Kein baldiger Muelltermin </div>';
+    widgetContent = '<div>No upcoming trash collection dates found</div>';
 }
 
 // Output widget content
 console.log(widgetContent);
-
 
 
 
