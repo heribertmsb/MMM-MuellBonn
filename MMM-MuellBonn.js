@@ -4,7 +4,7 @@
  * By Steven Heribert , heribert@makerspacebonn.de
  * MIT Licensed.
  */
-Module.register("trash_schedule", {
+Module.register("MMM-MuellBonn", {
   // Define module defaults
   defaults: {
       daysFromToday: 4,
