@@ -39,31 +39,39 @@ Module.register("MMM-MuellBonn", {
         console.log("MMM-MuellBonn set update");
     },
 
-    // Process loaded trash schedule
-    processTrashSchedule: function(trashSchedule) {
-        // Filter trash collections based on the number of days from today
-        const today = moment();
-        const upcomingCollections = trashSchedule.filter(entry => {
-            const collectionDate = moment(entry.date, 'DD.MM.YYYY');
-            const daysUntilCollection = collectionDate.diff(today, 'days');
-            return daysUntilCollection <= this.config.daysFromToday;
-        });
+// Process loaded trash schedule
+processTrashSchedule: function(trashSchedule) {
+    console.log('Trash schedule:', trashSchedule); // Log the trash schedule data
     
-        // Generate HTML for displaying upcoming collections
-        const container = document.createElement('div');
-        upcomingCollections.forEach(entry => {
-            const collectionDate = moment(entry.date, 'DD.MM.YYYY');
-            const daysUntilCollection = collectionDate.diff(today, 'days');
-            const icon = this.getTrashIcon(entry.type);
-            const collectionText = `${collectionDate.format('DD.MM.YYYY')} (${daysUntilCollection} days)`;
-            const entryElement = document.createElement('div');
-            entryElement.innerHTML = `${icon} ${collectionText}`;
-            container.appendChild(entryElement);
-        });
+    // Filter trash collections based on the number of days from today
+    const today = moment();
+    const upcomingCollections = trashSchedule.filter(entry => {
+        const collectionDate = moment(entry.date, 'DD.MM.YYYY');
+        const daysUntilCollection = collectionDate.diff(today, 'days');
+        return daysUntilCollection <= this.config.daysFromToday;
+    });
     
-        // Update module's DOM with the generated HTML
-        this.updateDom(1000, container);
-    },
+    console.log('Upcoming collections:', upcomingCollections); // Log the filtered upcoming collections
+    
+    // Generate HTML for displaying upcoming collections
+    const container = document.createElement('div');
+    upcomingCollections.forEach(entry => {
+        const collectionDate = moment(entry.date, 'DD.MM.YYYY');
+        const daysUntilCollection = collectionDate.diff(today, 'days');
+        const icon = this.getTrashIcon(entry.type);
+        const collectionText = `${collectionDate.format('DD.MM.YYYY')} (${daysUntilCollection} days)`;
+        const entryElement = document.createElement('div');
+        entryElement.innerHTML = `${icon} ${collectionText}`;
+        container.appendChild(entryElement);
+    });
+
+    // Log the generated HTML content
+    console.log('Generated HTML content:', container.innerHTML);
+    
+    // Update module's DOM with the generated HTML
+    this.updateDom(1000, container);
+},
+
   
     // Get trash icon HTML
     getTrashIcon: function(trashType) {
