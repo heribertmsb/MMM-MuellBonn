@@ -70,9 +70,17 @@ Module.register("MMM-MuellBonn", {
                 }
                 container.appendChild(entryElement);
             });
+            const para = document.createElement("p");
+            para.innerText = "This is a paragraph.";
+            document.body.appendChild(para);
+
+
         } else {
             container = document.createElement('div');
             container.innerHTML = 'Kein Muell in den nächsten 4 Tagen';
+            const para = document.createElement("p");
+            para.innerText = "This is a paragraph.";
+            document.body.appendChild(para);
         }
     // Log the generated HTML content
     console.log('Generated HTML content:', container.innerHTML);
