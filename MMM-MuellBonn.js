@@ -42,13 +42,17 @@ Module.register("MMM-MuellBonn", {
     // Process loaded trash schedule
     processTrashSchedule: function(trashSchedule) {
         // Filter trash collections based on the number of days from today
+        console.log('Trash schedule:', trashSchedule); // Log the trash schedule data
+        
         const today = moment();
         const upcomingCollections = trashSchedule.filter(entry => {
             const collectionDate = moment(entry.date, 'DD.MM.YYYY');
             const daysUntilCollection = collectionDate.diff(today, 'days');
             return daysUntilCollection >= 0 && daysUntilCollection <= this.config.daysFromToday;
         });
-    
+
+
+        console.log('Upcoming collections:', upcomingCollections); // Log the filtered upcoming collections
         // Generate HTML for displaying upcoming collections or message if none
         let container;
         if (upcomingCollections.length > 0) {
