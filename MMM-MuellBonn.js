@@ -53,17 +53,23 @@ processTrashSchedule: function(trashSchedule) {
     
     console.log('Upcoming collections:', upcomingCollections); // Log the filtered upcoming collections
     
-    // Generate HTML for displaying upcoming collections
-    const container = document.createElement('div');
-    upcomingCollections.forEach(entry => {
-        const collectionDate = moment(entry.date, 'DD.MM.YYYY');
-        const daysUntilCollection = collectionDate.diff(today, 'days');
-        const icon = this.getTrashIcon(entry.type);
-        const collectionText = `${collectionDate.format('DD.MM.YYYY')} (${daysUntilCollection} days)`;
-        const entryElement = document.createElement('div');
-        entryElement.innerHTML = `${icon} ${collectionText}`;
-        container.appendChild(entryElement);
-    });
+     // Generate HTML for displaying upcoming collections or message if none
+     let container;
+     if (upcomingCollections.length > 0) {
+         container = document.createElement('div');
+         upcomingCollections.forEach(entry => {
+             const collectionDate = moment(entry.date, 'DD.MM.YYYY');
+             const daysUntilCollection = collectionDate.diff(today, 'days');
+             const icon = this.getTrashIcon(entry.type);
+             const collectionText = `${collectionDate.format('DD.MM.YYYY')} (${daysUntilCollection} days)`;
+             const entryElement = document.createElement('div');
+             entryElement.innerHTML = `${icon} ${collectionText}`;
+             container.appendChild(entryElement);
+         });
+     } else {
+         container = document.createElement('div');
+         container.innerHTML = 'Kein Muell in den nächsten 4 Tagen';
+     }
 
     // Log the generated HTML content
     console.log('Generated HTML content:', container.innerHTML);
