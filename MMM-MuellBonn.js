@@ -39,7 +39,7 @@ Module.register("MMM-MuellBonn", {
         console.log("MMM-MuellBonn set update");
     },
 
-    / Process loaded trash schedule
+    // Process loaded trash schedule
     processTrashSchedule: function(trashSchedule) {
         // Filter trash collections based on the number of days from today
         const today = moment();
