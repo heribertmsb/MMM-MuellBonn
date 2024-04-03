@@ -1,5 +1,5 @@
 const NodeHelper = require('node_helper');
-const fs = require('fs');
+// const fs = require('fs');
 
 module.exports = NodeHelper.create({
     start: function() {
@@ -10,6 +10,7 @@ module.exports = NodeHelper.create({
     socketNotificationReceived: function(notification, payload) {
         if (notification === 'GET_TRASH_SCHEDULE') {
             this.loadTrashSchedule(payload.csvFilePath);
+            console.log('Auftrag Daten ermittel');
         }
     },
 
@@ -22,6 +23,8 @@ loadTrashSchedule: function(csvFilePath) {
     fs.readFile(csvFilePath, 'utf8', function(err, data) {
         if (err) {
             self.sendSocketNotification('TRASH_SCHEDULE_ERROR', { error: err });
+            console.error('Error reading CSV file:', err);
+            console.log('Fehler Daten ');
             return;
         }
 
@@ -30,11 +33,12 @@ loadTrashSchedule: function(csvFilePath) {
         const trashSchedule = rows.map(row => {
             const [date, type] = row.trim().split(';'); // Use semicolon as delimiter
             return { date, type };
+            
         });
-
+        console.log('Daten ermittelt');
         // Send the loaded trash schedule to the client-side JavaScript
         self.sendSocketNotification('TRASH_SCHEDULE_LOADED', { trashSchedule });
     });
-}
+},
 
 });
