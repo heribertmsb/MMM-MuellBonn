@@ -13,6 +13,8 @@ Module.register("MMM-MuellBonn", {
       updateInterval: 60 * 60 * 1000, // Update interval in milliseconds (1 hour in this example)
   },
 
+  console.log("MMM-MuellBonn defaults gesetzt");
+
   // Override socket notification handler
   socketNotificationReceived: function(notification, payload) {
       if (notification === 'TRASH_SCHEDULE_LOADED') {
@@ -22,18 +24,20 @@ Module.register("MMM-MuellBonn", {
       }
   },
 
+  console.log("MMM-MuellBonn vor Aufruf Startfiunktion");
+
   // Override start method
   start: function() {
-      console.log("MMM-MuellBonn module started!");
+    console.log("MMM-MuellBonn module started!");
 
-      // Request trash schedule from node helper
-      this.sendSocketNotification('GET_TRASH_SCHEDULE', { csvFilePath: this.config.csvFilePath });
+    // Request trash schedule from node helper
+    this.sendSocketNotification('GET_TRASH_SCHEDULE', { csvFilePath: this.config.csvFilePath });
 
-      // Schedule updates
-      setInterval(() => {
-          this.sendSocketNotification('GET_TRASH_SCHEDULE', { csvFilePath: this.config.csvFilePath });
-      }, this.config.updateInterval);
-  },
+    // Schedule updates
+    setInterval(() => {
+        this.sendSocketNotification('GET_TRASH_SCHEDULE', { csvFilePath: this.config.csvFilePath });
+    }, this.config.updateInterval);
+},
 
   // Process loaded trash schedule
   processTrashSchedule: function(trashSchedule) {
