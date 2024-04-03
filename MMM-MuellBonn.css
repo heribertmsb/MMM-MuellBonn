@@ -1,0 +1,4 @@
+.module-content img {
+  max-width: 50px; /* Set the maximum width for the icon */
+  max-height: 50px; /* Set the maximum height for the icon */
+}

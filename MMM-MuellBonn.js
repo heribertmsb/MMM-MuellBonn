@@ -11,6 +11,7 @@ Module.register("MMM-MuellBonn", {
         csvFilePath: 'modules/MMM-MuellBonn/trash_collection_schedule.csv', // Default CSV file path
         iconPath: 'modules/MMM-MuellBonn/icons/',
         updateInterval: 60 * 60 * 1000, // Update interval in milliseconds (1 hour in this example)
+        css: "MMM-MuellBonn.css"
     },
   
     // Override socket notification handler
