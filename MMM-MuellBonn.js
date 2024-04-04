@@ -52,18 +52,24 @@ Module.register("MMM-MuellBonn", {
             return daysUntilCollection >= 0 && daysUntilCollection <= this.config.daysFromToday;
         });
 
+// Create a container element to hold the generated HTML content
+    const container = document.createElement('div');
 
         console.log('Upcoming collections:', upcomingCollections); // Log the filtered upcoming collections
         // Generate HTML for displaying upcoming collections or message if none
-        let container;
-        if (upcomingCollections.length > 0) {
+ //       let container;
+ 
+ if (upcomingCollections.length > 0) {
             container = document.createElement('div');
             upcomingCollections.forEach(entry => {
                 const collectionDate = moment(entry.date, 'DD.MM.YYYY');
                 const daysUntilCollection = collectionDate.diff(today, 'days');
                 const icon = this.getTrashIcon(entry.type);
                 const collectionText = `${collectionDate.format('DD.MM.YYYY')} (${daysUntilCollection} days)`;
-                const entryElement = document.createElement('div');
+
+        // Create a div element for each collection entry
+        const entryElement = document.createElement('div');
+
                 entryElement.innerHTML = `${icon} ${collectionText}`;
                 if (daysUntilCollection === 0) {
                     entryElement.style.color = 'red'; // Highlight collections due today in red
