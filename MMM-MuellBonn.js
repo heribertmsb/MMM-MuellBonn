@@ -53,8 +53,8 @@ Module.register("MMM-MuellBonn", {
         });
 
 // Create a container element to hold the generated HTML content
-    const container = document.createElement('div');
-
+        let container = document.createElement('div');
+//
         console.log('Upcoming collections:', upcomingCollections); // Log the filtered upcoming collections
         // Generate HTML for displaying upcoming collections or message if none
  //       let container;
